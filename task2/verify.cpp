@@ -65,8 +65,8 @@ TEST_F(TestDut, FSMTest)
     runSimulation();
     EXPECT_EQ(top->data_out, 0b0000);
 
-    top->rst = 0;
-
+    top->rst = 1;
+    runSimulation();
     std::vector<int> expected = {
         0b0000'0000,
         0b0000'0001,
@@ -79,8 +79,10 @@ TEST_F(TestDut, FSMTest)
         0b1111'1111,
         0b0000'0000};
 
+    top->rst = 0;
     for (int exp : expected)
     {
+        std::cout << top->data_out << std::endl;
         EXPECT_EQ(top->data_out, exp);
         runSimulation();
     }

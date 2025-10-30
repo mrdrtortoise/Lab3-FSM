@@ -1,4 +1,4 @@
-#include "Vclktick.h"
+#include "Vdelstate.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
@@ -13,24 +13,24 @@ int main(int argc, char **argv, char **env)
 
     Verilated::commandArgs(argc, argv);
     // init top verilog instance
-    Vclktick *top = new Vclktick;
+    Vdelstate *top = new Vdelstate;
     // init trace dump
     Verilated::traceEverOn(true);
     VerilatedVcdC *tfp = new VerilatedVcdC;
     top->trace(tfp, 99);
-    tfp->open("clktick.vcd");
+    tfp->open("delstate.vcd");
 
     // init Vbuddy
     if (vbdOpen() != 1)
         return (-1);
-    vbdHeader("L3T2:Clktick");
-    vbdSetMode(1); // Flag mode set to one-shot
+    vbdHeader("L3T2: F1 Delay");
+    vbdSetMode(0); // Flag mode set to one-shot
 
     // initialize simulation inputs
     top->clk = 1;
     top->rst = 0;
     top->en = 0;
-    top->N = vbdValue();
+    top->N = 20;
 
     // run simulation for MAX_SIM_CYC clock cycles
     for (simcyc = 0; simcyc < MAX_SIM_CYC; simcyc++)
@@ -43,16 +43,22 @@ int main(int argc, char **argv, char **env)
             top->eval();
         }
 
-        // Display toggle neopixel
+        /* Display toggle neopixel
         if (top->tick)
         {
             vbdBar(lights);
             lights = lights ^ 0xFF;
-        }
+        }*/
         // set up input signals of testbench
         top->rst = (simcyc < 2); // assert reset for 1st cycle
-        top->en = (simcyc > 2);
+        top->en = simcyc > 2;
+        vbdBar(top->data_out & 0xFF);
         top->N = vbdValue();
+        /*else
+        {
+            top->en = vbdFlag();
+        }
+        top->N = vbdValue();*/
         vbdCycle(simcyc);
 
         if (Verilated::gotFinish() || vbdGetkey() == 'q')

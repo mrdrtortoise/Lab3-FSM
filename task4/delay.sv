@@ -1,5 +1,5 @@
 module delay #(
-    parameter WIDTH = 10    // no of bits in delay counter
+    parameter WIDTH = 7    // no of bits in delay counter
 )(
     input   logic               clk,        // clock signal
     input   logic               rst,        // reset signal
@@ -15,9 +15,20 @@ module delay #(
     my_state current_state, next_state;
 
     // counter
-    always_ff @(posedge clk)
-        if (rst | trigger | count=={WIDTH{1'b0}}) count <= n - 1'b1;
-        else                                count <= count - 1'b1;
+    always_ff @(posedge clk) begin
+        if(trigger)
+            $display("trigger is 1");
+        else
+            $display("trigger is 0");
+        if (rst | trigger | count=={WIDTH{1'b0}}) begin
+            count <= n - 1'b1;
+            $display("count has started and is now %0d", count);
+        end
+        else  begin
+            count <= count - 1'b1;
+            $display("count in delay is: %0d", count);
+        end
+    end
 
     // state transition
     always_ff @(posedge clk)
