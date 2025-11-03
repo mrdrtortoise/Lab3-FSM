@@ -21,16 +21,16 @@ int main(int argc, char **argv, char **env)
     tfp->open("clktick.vcd");
 
     // init Vbuddy
-    if (vbdOpen() != 1)
+    /*if (vbdOpen() != 1)
         return (-1);
     vbdHeader("L3T2:Clktick");
-    vbdSetMode(1); // Flag mode set to one-shot
+    vbdSetMode(1); // Flag mode set to one-shot*/
 
     // initialize simulation inputs
     top->clk = 1;
     top->rst = 0;
     top->en = 0;
-    top->N = vbdValue();
+    top->N = 20; // vbdValue();
 
     // run simulation for MAX_SIM_CYC clock cycles
     for (simcyc = 0; simcyc < MAX_SIM_CYC; simcyc++)
@@ -44,19 +44,23 @@ int main(int argc, char **argv, char **env)
         }
 
         // Display toggle neopixel
-        if (top->tick)
+        /*if (top->tick)
         {
             vbdBar(lights);
             lights = lights ^ 0xFF;
-        }
+        }*/
         // set up input signals of testbench
         top->rst = (simcyc < 2); // assert reset for 1st cycle
         top->en = (simcyc > 2);
-        top->N = vbdValue();
-        vbdCycle(simcyc);
+        // top->N = vbdValue();
+        // vbdCycle(simcyc);
 
-        if (Verilated::gotFinish() || vbdGetkey() == 'q')
+        /*if (Verilated::gotFinish() || vbdGetkey() == 'q')
+            exit(0);*/
+        if (Verilated::gotFinish())
+        {
             exit(0);
+        }
     }
 
     vbdClose(); // ++++
