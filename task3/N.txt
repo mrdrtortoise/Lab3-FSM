@@ -1,0 +1,7 @@
+N is between 19 and 20 for this comuter (desktop)
+closer to 20
+
+when I switched to the challenge yourself I had to increase N to double of what was calibrated, 
+as the calibration was actually 0.5 seconds. This is because we were basically doing two "state switches"
+in one second. first to turn the light off and then turn them on again. since we want to do one state transition
+in one second, N has to be increased.

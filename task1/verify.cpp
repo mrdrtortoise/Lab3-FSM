@@ -87,6 +87,7 @@ TEST_F(TestDut, SequenceTest)
 
     for (int exp : expected)
     {
+        std::cout << int(top->data_out) << std::endl;
         EXPECT_EQ(top->data_out, exp);
         runSimulation();
     }
