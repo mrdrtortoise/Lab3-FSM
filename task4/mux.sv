@@ -1,19 +1,19 @@
 module mux (
-    input logic tick,
-    input logic time_out,
-    input logic cmd_seq,
-    output logic out
+    input logic     a,
+    input logic     b,
+    input logic     s,
+    output logic    c
 );
 
 always_comb begin
-    if(cmd_seq) begin
-        $display("input set to one and mux output is %0d", tick);
-        out = tick;
+    if(s == 1'b1) begin
+        c = a;
     end
-    else begin
-        $display("input set to zero and mux output is %0d", time_out);
-        out = time_out;
+    else if(s == 1'b0) begin
+        c = b;
     end
+    else
+        c = a;
 end
     
 endmodule
